@@ -1,13 +1,20 @@
 import { CreateUserParams, SignInParams } from "@/type";
-import { Account, Avatars, Client, Databases, ID, Query } from "react-native-appwrite";
-
+import {
+  Account,
+  Avatars,
+  Client,
+  Databases,
+  ID,
+  Query,
+  Storage,
+} from "react-native-appwrite";
 
 export const appwriteConfig = {
   endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT,
   platform: "com.rhymestech.quickbite",
   projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID,
-  databaseId: "686b7bce001b3d3dccee",
-  userCollectionId: "686b7bdf003b76476250",
+  databaseId: "687a993b0035aeed1525",
+  userCollectionId: "687a994c0024ecbe2f0e",
 };
 
 export const client = new Client();
@@ -19,6 +26,7 @@ client
 
 export const account = new Account(client);
 export const databases = new Databases(client);
+export const storage = new Storage(client);
 const avatars = new Avatars(client);
 
 export const createUser = async ({
@@ -40,36 +48,36 @@ export const createUser = async ({
       ID.unique(),
       { accountId: newAccount.$id, name, email, avatar: avatarUrl }
     );
-
   } catch (e) {
     throw new Error(e as string);
   }
 };
 
 export const signIn = async ({ email, password }: SignInParams) => {
-    try {
-        const session = await account.createEmailPasswordSession(email, password)
-    } catch (e) {
-        throw new Error(e as string)
-    }
+  try {
+    const session = await account.createEmailPasswordSession(email, password);
+    return session;
+  } catch (e) {
+    throw new Error(e as string);
+  }
 };
 
 export const getCurrentUser = async () => {
   try {
-    const currentAccount = await account.get()
-    if (!currentAccount) throw Error
+    const currentAccount = await account.get();
+    if (!currentAccount) throw Error;
 
     const currentUser = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.userCollectionId,
       [Query.equal("accountId", currentAccount.$id)]
-    )
+    );
 
-    if (!currentUser) throw Error
+    if (!currentUser) throw Error;
 
-    return currentUser.documents[0]
+    return currentUser.documents[0];
   } catch (e) {
-    console.log(e)
-    throw new Error(e as string)
+    console.log(e);
+    throw new Error(e as string);
   }
-}
+};
