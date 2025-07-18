@@ -14,7 +14,12 @@ export const appwriteConfig = {
   platform: "com.rhymestech.quickbite",
   projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID,
   databaseId: "687a993b0035aeed1525",
+  bucketId: "687abf17000deb586d34",
   userCollectionId: "687a994c0024ecbe2f0e",
+  categoriesCollectionId: "687ab8850030f3f94138",
+  menuCollectionId: "687ab94d001cb2ab7420",
+  customizationsCollectionId: "687abbdf00258d0637b3",
+  menuCustomizationsCollectionId: "687abde20015c60ecbd0"
 };
 
 export const client = new Client();
